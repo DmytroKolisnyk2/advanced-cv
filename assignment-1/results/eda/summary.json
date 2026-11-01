@@ -1,0 +1,57 @@
+{
+ "n_train_samples": 24,
+ "n_test_samples": 10,
+ "n_photos": {
+  "train": 127,
+  "test": 35
+ },
+ "photos_per_sample": {
+  "count": 34.0,
+  "mean": 4.76,
+  "std": 1.46,
+  "min": 3.0,
+  "25%": 3.25,
+  "50%": 5.0,
+  "75%": 6.0,
+  "max": 8.0
+ },
+ "cameras": {
+  "test": {
+   "iphone14": 14,
+   "iphone16": 21,
+   "motorolaedge": 0,
+   "motorolaedge60fusion": 0,
+   "samsunga52": 0
+  },
+  "train": {
+   "iphone14": 0,
+   "iphone16": 0,
+   "motorolaedge": 69,
+   "motorolaedge60fusion": 3,
+   "samsunga52": 55
+  }
+ },
+ "ppm_by_camera": {
+  "iphone14": 13.942,
+  "iphone16": 19.525,
+  "motorolaedge": 4.597,
+  "motorolaedge60fusion": 12.465,
+  "samsunga52": 4.553
+ },
+ "mpix_by_camera": {
+  "iphone14": 12.2,
+  "iphone16": 24.5,
+  "motorolaedge": 1.2,
+  "motorolaedge60fusion": 9.4,
+  "samsunga52": 1.9
+ },
+ "field_of_view_mm_median": [
+  348.0682213713888,
+  219.4110115236876
+ ],
+ "class_counts": {
+  "gravel": 11,
+  "fine": 9,
+  "sand": 4
+ }
+}

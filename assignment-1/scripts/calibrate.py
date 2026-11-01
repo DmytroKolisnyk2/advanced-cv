@@ -1,4 +1,4 @@
-"""Label-free estimate of the pixels-per-mm of a camera missing from ppm_updated.csv (Samsung A52).
+"""Label-free check of a camera's pixels-per-mm (Samsung A52) against ppm_updated.csv.
 
 Almost every training soil was photographed with both the Motorola Edge (known ppm) and the Samsung A52, from the
 same 21 cm. The same soil at the right scale must have the same texture spectrum in cycles per mm. For a candidate
@@ -64,6 +64,7 @@ def main() -> None:
     ref_cam, new_cam = "motorolaedge", "samsunga52"
     moto = photos[photos.camera == ref_cam]
     sams = photos[photos.camera == new_cam]
+    official = float(sams.ppm.iloc[0])  # ppm_updated.csv scaled to the stored photo size
     ref = sample_spectra(moto)
     grid = np.round(np.arange(3.0, 8.01, 0.1), 2)
     curve = [mismatch(ref, sample_spectra(sams.assign(ppm=s))) for s in grid]
@@ -78,7 +79,7 @@ def main() -> None:
     res = {"camera": "Samsung A52", "estimated_ppm": best, "grid": grid.tolist(), "mismatch": curve,
            "self_check_scale_grid": check_grid.tolist(), "self_check_mismatch": check,
            "self_check_best": float(check_grid[int(np.argmin(check))]),
-           "optics_prior_ppm": round(1599 / 290.0, 2),
+           "optics_prior_ppm": round(1599 / 290.0, 2), "table_ppm": round(official, 3),
            "n_pairs": len(set(ref) & set(sams.sample_id))}
     out = ROOT / "results/calibration"
     out.mkdir(parents=True, exist_ok=True)
@@ -87,6 +88,7 @@ def main() -> None:
     ax[0].plot(grid, curve, "o-", ms=3)
     ax[0].axvline(best, color="r", ls="--", label=f"best {best}")
     ax[0].axvline(res["optics_prior_ppm"], color="g", ls=":", label=f"optics prior {res['optics_prior_ppm']}")
+    ax[0].axvline(official, color="k", ls="-.", label=f"ppm_updated.csv {official:.2f}")
     ax[0].set(xlabel="Samsung A52 ppm candidate", ylabel="spectrum mismatch vs Motorola (same soils)")
     ax[0].legend()
     ax[1].plot(check_grid, check, "o-", ms=3)

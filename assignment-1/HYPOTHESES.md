@@ -6,9 +6,11 @@ added after the results (see the git history of this file).
 ## Block 0: data, metric, validation, tiles
 
 What the data turned out to be (before any model was trained): 24 training soils, 127 photos from a Motorola Edge
-(69 photos, stored at 1600 px, i.e. 4.6 px/mm), a Samsung A52 (55 photos, no ppm given) and a Motorola Edge 60
-fusion (3 photos, 12.5 px/mm). 10 test soils, 35 photos, only iPhone 14 / 16 at 13.9 / 19.5 px/mm. All photos are
-taken from 21 cm (host, forum). The Samsung ppm is estimated without labels at 5.0 px/mm (`scripts/calibrate.py`).
+(69 photos, stored at 1600 px instead of 4000, i.e. 4.60 px/mm), a Samsung A52 (55 photos, stored at 1599 px instead
+of 9248, i.e. 4.55 px/mm) and a Motorola Edge 60 fusion (3 photos, 12.5 px/mm). 10 test soils, 35 photos, only
+iPhone 14 / 16 at 13.9 / 19.5 px/mm. All photos are taken from 21 cm (host, forum). A label-free check of the
+Samsung scale (texture spectra matched to the Motorola photos of the same soils, `scripts/calibrate.py`) gives
+4.8 px/mm, +5% from the table value; the same method is +5% on a Motorola-vs-Motorola self-check.
 Everything is resampled to the training density, 4.67 px/mm (0.21 mm per pixel). Tiles are 48 mm x 48 mm = 224 px.
 Validation uses 6 group folds over physical samples, stratified by D50.
 

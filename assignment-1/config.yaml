@@ -9,8 +9,7 @@ data:
   overlap: 0.5
   roi: 0.7             # central 70% of each side (drops tray rim and the LED strip in Samsung photos)
   max_tiles: 48        # per photo, main cache
-  extra_ppm:           # cameras missing from ppm_updated.csv, px/mm at the stored resolution
-    Samsung A52: 5.0   # scripts/calibrate.py (texture spectrum vs Motorola on the same soils) + optics
+  extra_ppm: {}        # px/mm for cameras missing from ppm_updated.csv (none; Samsung was checked by calibrate.py)
   folds: 6
   fold_seed: 0
   tile_mm_ablation: [24, 96]

@@ -155,5 +155,6 @@
  ],
  "self_check_best": 1.05,
  "optics_prior_ppm": 5.51,
+ "table_ppm": 4.553,
  "n_pairs": 21
 }
