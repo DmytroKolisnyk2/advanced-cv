@@ -148,3 +148,22 @@ Validation uses 6 group folds over physical samples, stratified by D50.
   pretrained SSL ViT is the most robust; only the from-scratch ViT is fragile.
 - H7 **confirmed on correlation, smaller gain.** Family-best errors correlate at 0.89-0.98. The equal-weight top-5 blend
   gains 1.6% in CV (34.06 -> 33.53) and 3.5% on the public LB (79.85 -> 77.08), below the predicted 3-8% in CV.
+
+## Block 8: closing the CV-LB gap and the sands (follow-up, written before these runs)
+
+Motivation: CV 34 vs public LB 77-80, and the 4 sands have EMD about 60 in every family.
+
+- **H8.1 Test-time harmonisation.** The training photos were messenger-compressed (1600 px long side, JPEG). The
+  test iPhone photos are native and sharp. Even after resampling to 4.67 px/mm they differ in sharpness and in
+  compression artefacts. If the test photos are first put through the same path (1600 px, JPEG at the quality
+  measured on the training files), the domain gap shrinks. *Prediction:* (a) label-free, the DINOv3 feature
+  distance from test photos to their nearest training photo, and a sharpness statistic, both move towards the
+  training values. (b) The public LB improves by 3-10 EMD for the texture models (CNN, DINOv3 FT) and less for the
+  colour-driven scratch ViT. (c) On H374, the only training soil photographed at native resolution (Motorola Edge
+  60 fusion), the harmonised input changes the OOF error by < 3 EMD. CV is unchanged by construction (no retraining).
+- **H8.2 Soil-mixup.** Cumulative passing is linear in mass mixing: a mix of soils A and B with mass fraction λ has
+  curve (1-λ)F_A + λF_B. Pasting a rectangle of area fraction λ from a tile of soil B into a tile of soil A (same
+  mm-per-pixel) and mixing the curves the same way gives the model physically plausible intermediate examples,
+  assuming area ≈ mass. The models now see only 24 curves, mostly two modes. *Prediction:* CV improves by 1-3 EMD,
+  and the sand EMD drops from about 60 to at most 50. The fine-tuned CNN and DINOv3 benefit more than the
+  scratch ViT (whose colour cue is blurred by the mix).
