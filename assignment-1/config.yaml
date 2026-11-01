@@ -4,14 +4,16 @@
 data:
   dir: data/raw
   cache: cache
-  tile_mm: 20          # physical side of one tile (see README "Tile size")
-  out_px: 224          # -> 11.2 px/mm
+  tile_mm: 48          # physical side of one tile (see README "Tile size")
+  out_px: 224          # -> 4.67 px/mm, the native density of the training photos (only downsampling)
   overlap: 0.5
-  roi: 0.9             # central 90% of each side
+  roi: 0.7             # central 70% of each side (drops tray rim and the LED strip in Samsung photos)
   max_tiles: 48        # per photo, main cache
+  extra_ppm:           # cameras missing from ppm_updated.csv, px/mm at the stored resolution
+    Samsung A52: 5.0   # scripts/calibrate.py (texture spectrum vs Motorola on the same soils) + optics
   folds: 6
   fold_seed: 0
-  tile_mm_ablation: [10, 40]
+  tile_mm_ablation: [24, 96]
 robustness:            # extra caches of the training photos, max 12 tiles per photo
   max_tiles: 12
   ppm_error: [0.5, 0.71, 1.41, 2.0]    # mis-calibrated scale
@@ -44,8 +46,8 @@ experiments:
   cnn_r18_bs8_grouped_frozenbn: {family: cnn, arch: resnet18.tv_in1k, batch: 8, steps: 2400, sampler: grouped, groups: 2, norm: frozen_bn}
   cnn_r18_noaug:        {family: cnn, arch: resnet18.tv_in1k, aug: none}
   cnn_r18_strongaug:    {family: cnn, arch: resnet18.tv_in1k, aug: strong}
-  cnn_r18_tile10mm:     {family: cnn, arch: resnet18.tv_in1k, tile_mm: 10}
-  cnn_r18_tile40mm:     {family: cnn, arch: resnet18.tv_in1k, tile_mm: 40}
+  cnn_r18_tile24mm:     {family: cnn, arch: resnet18.tv_in1k, tile_mm: 24}
+  cnn_r18_tile96mm:     {family: cnn, arch: resnet18.tv_in1k, tile_mm: 96}
   cnn_r18_img112:       {family: cnn, arch: resnet18.tv_in1k, img: 112}
   cnn_r50_adamw:        {family: cnn, arch: resnet50.a1_in1k}
   cnn_effb0_adamw:      {family: cnn, arch: efficientnet_b0.ra_in1k}

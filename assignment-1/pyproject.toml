@@ -18,6 +18,7 @@ dependencies = [
     "requests",
     "kaggle",
     "tabulate",
+    "six",
 ]
 
 [dependency-groups]

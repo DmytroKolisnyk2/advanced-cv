@@ -3,23 +3,30 @@
 Each block was written and committed before its experiments were run. The "Outcome" sections were
 added after the results (see the git history of this file).
 
-## Block 0: metric, validation, tiles
+## Block 0: data, metric, validation, tiles
 
-Setup: 24 training samples, several photos each, 6 group folds (a physical sample is never in both train and
-validation, folds stratified by D50), tiles of a fixed 20 mm x 20 mm resampled to 224 px (11.2 px/mm).
+What the data turned out to be (before any model was trained): 24 training soils, 127 photos from a Motorola Edge
+(69 photos, stored at 1600 px, i.e. 4.6 px/mm), a Samsung A52 (55 photos, no ppm given) and a Motorola Edge 60
+fusion (3 photos, 12.5 px/mm). 10 test soils, 35 photos, only iPhone 14 / 16 at 13.9 / 19.5 px/mm. All photos are
+taken from 21 cm (host, forum). The Samsung ppm is estimated without labels at 5.0 px/mm (`scripts/calibrate.py`).
+Everything is resampled to the training density, 4.67 px/mm (0.21 mm per pixel). Tiles are 48 mm x 48 mm = 224 px.
+Validation uses 6 group folds over physical samples, stratified by D50.
 
-- **H0.1 Scale errors are expensive.** If the whole curve stays inside the sieve range, an error of factor 2 in
-  pixels-per-mm shifts it by log10(2) = 0.30 decades, i.e. EMD = 100 * 0.30 = 30. That is more than the gap between
-  a naive and a good model. *Prediction:* when the pipeline gets ppm x 2 or x 0.5, CV EMD rises by 5-20. The rise
-  is smaller than 30 because the models are only partly scale-sensitive, and the invisible fine part of the curve
-  does not move.
-- **H0.2 The fine fractions are not visible.** At 11.2 px/mm one pixel is 0.09 mm, so clay and silt (< 0.063 mm)
-  are below the pixel size. They can only be inferred from colour and how the surface looks. *Prediction:* fine
-  soils get the highest EMD in every family.
+- **H0.1 Scale errors are expensive.** If the curve stays inside the sieve range, an error of factor 2 in ppm
+  shifts it by log10(2) = 0.30 decades, i.e. EMD = 100 * 0.30 = 30, more than the gap between a naive and a good
+  model. *Prediction:* when the pipeline gets ppm x 2 or x 0.5, CV EMD rises by 5-20. The rise is smaller than 30
+  because the models are only partly scale-sensitive, and the invisible fine part of the curve does not move.
+- **H0.2 Fines and most sand are not visible.** At 0.21 mm/px, clay, silt and fine sand (< 0.2 mm) are below one
+  pixel. Only coarse sand and gravel are resolved. *Prediction:* fine soils have the highest EMD in every family,
+  and colour carries much of the signal for the fine end.
 - **H0.3 The image-free baseline is strong.** With 24 curves, predicting the training mean is a strong reference.
-  *Prediction:* the best single model improves on the training-mean EMD by 20-35%, not more.
-- **H0.4 Camera is not a shortcut.** *Prediction:* a camera/ppm-only predictor is no better than the training mean.
-  If it is clearly better, the camera correlates with the soil type, and image models could learn the camera.
+  *Prediction:* the best single model improves on the training-mean CV EMD by 20-35%, not more.
+- **H0.4 Camera is a weak shortcut in CV and useless on test.** Almost every soil was photographed by both training
+  phones, so a camera-only predictor is no better than the training mean. *Prediction:* `ctrl_camera_only` is about
+  equal to `base_train_mean`.
+- **H0.5 Camera domain shift.** Test photos come from other phones (iPhones), with different colour processing and
+  sharper JPEGs, even after resampling. *Prediction:* the public LB is worse than CV for every family, and models
+  that rely more on colour (CNNs with weak augmentation) lose more than texture-based ones.
 
 ## Block 1: CNNs
 
@@ -31,9 +38,10 @@ validation, folds stratified by D50), tiles of a fixed 20 mm x 20 mm resampled t
   "bs8, grouped, trainable BN" run is at least 2 EMD worse than the same run with frozen BN statistics. GroupNorm
   and frozen BN are both fine with normal batches.
 - **H1.3** ConvNeXt-T <= ResNet-50 <= ResNet-18 in EMD, but the differences are within fold std (24 samples).
-- **H1.4 Tile size.** 10 mm tiles lose the context of gravel grains (2-63 mm). 40 mm tiles at the same 224 px
-  have half the resolution and lose sand detail. *Prediction:* 20 mm is best or ties with 40 mm.
-- **H1.5** Feeding the 20 mm tile at 112 px (half the pixel density) costs 1-2 EMD (sand at 0.2-2 mm becomes 1-10 px).
+- **H1.4 Tile size.** A 24 mm tile (upsampled x2, no new detail) shows fewer gravel grains per tile. A 96 mm tile
+  at the same 224 px halves the resolution and drops coarse sand below 1 px. *Prediction:* 48 mm is best. 24 mm is
+  close (same information, larger apparent grains suit the ImageNet receptive fields). 96 mm is worst.
+- **H1.5** Feeding the 48 mm tile at 112 px (half the pixel density) costs 1-2 EMD (coarse sand drops to 1-4 px).
 - **H1.6** Strong augmentation (blur, noise, stronger colour jitter) hurts. Blur changes the apparent texture
   scale, which is close to changing the label.
 
@@ -68,7 +76,7 @@ validation, folds stratified by D50), tiles of a fixed 20 mm x 20 mm resampled t
 
 - **H4.1** For coarse soils the maps of all three families focus on large grains and grain boundaries. For fine
   soils they are diffuse (colour-driven).
-- **H4.2 Controls.** Grey input raises EMD clearly (the models use colour). Shuffling 56 px blocks inside a tile
+- **H4.2 Controls.** Grey input raises EMD clearly (the models use colour). Shuffling 56 px (12 mm) blocks inside a tile
   raises EMD only slightly (the models use texture statistics more than layout). A colour-statistics-only ridge
   lands between the training mean and the image models.
 

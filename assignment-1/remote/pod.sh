@@ -12,18 +12,18 @@ read -r IP PORT < <(python3 -c "import json; d = json.load(open('$HERE/.pod.json
 SSH_OPTS=(-p "$PORT" -i "$HOME/.ssh/runpod_a_nlp" -o StrictHostKeyChecking=accept-new
           -o UserKnownHostsFile="$HERE/.known_hosts" -o ServerAliveInterval=30 -o ConnectTimeout=20)
 REMOTE=/workspace/a1
-ENV="export PATH=\$HOME/.local/bin:\$PATH HF_HOME=/workspace/hf PYTHONUNBUFFERED=1; set -a; [ -f .env ] && . ./.env; set +a"
+ENV="export PATH=\$HOME/.local/bin:\$PATH HF_HOME=/root/hf UV_PROJECT_ENVIRONMENT=/root/venv UV_CACHE_DIR=/root/uvcache PYTHONUNBUFFERED=1; set -a; [ -f .env ] && . ./.env; set +a"
 
 case "$1" in
   push)
-    rsync -az --info=stats1 -e "ssh ${SSH_OPTS[*]}" \
+    rsync -az --no-owner --no-group --info=stats1 -e "ssh ${SSH_OPTS[*]}" \
       --exclude .venv --exclude data --exclude cache --exclude checkpoints --exclude runs --exclude __pycache__ \
       --exclude 'remote/.pod.json' --exclude 'remote/.known_hosts' --exclude '.git' --exclude .env \
       "$ROOT/" "root@$IP:$REMOTE/"
     # only the Kaggle credentials go to the pod (for the data download), never the RunPod key
     grep -E '^KAGGLE_[A-Z_]+=.+' "$ROOT/.env" | ssh "${SSH_OPTS[@]}" "root@$IP" "cat > $REMOTE/.env" ;;
   pull)
-    rsync -az --info=stats1 -e "ssh ${SSH_OPTS[*]}" "root@$IP:$REMOTE/results/" "$ROOT/results/"
+    rsync -az --no-owner --no-group --info=stats1 -e "ssh ${SSH_OPTS[*]}" "root@$IP:$REMOTE/results/" "$ROOT/results/"
     rsync -az -e "ssh ${SSH_OPTS[*]}" "root@$IP:$REMOTE/runs/" "$ROOT/runs/" || true ;;
   pullckpt)
     shift; for n in "$@"; do rsync -az -e "ssh ${SSH_OPTS[*]}" "root@$IP:$REMOTE/checkpoints/$n*" "$ROOT/checkpoints/"; done ;;

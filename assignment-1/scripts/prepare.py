@@ -24,11 +24,7 @@ Image.MAX_IMAGE_PIXELS = None
 
 def eda(photos: pd.DataFrame, labels: pd.DataFrame, out: Path) -> None:
     out.mkdir(parents=True, exist_ok=True)
-    sizes = []
-    for p in photos.path:
-        with Image.open(p) as im:
-            sizes.append(im.size)
-    photos = photos.assign(width=[s[0] for s in sizes], height=[s[1] for s in sizes])
+    photos = photos.copy()
     photos["mpix"] = photos.width * photos.height / 1e6
     photos["field_w_mm"] = photos.width / photos.ppm
     photos["field_h_mm"] = photos.height / photos.ppm
@@ -62,10 +58,10 @@ def eda(photos: pd.DataFrame, labels: pd.DataFrame, out: Path) -> None:
             im = im.convert("RGB")
             im.thumbnail((768, 768))
             im.save(th / f"{r.photo}.jpg", quality=85)
-        img = load_calibrated(r.path, r.ppm, 224 / 20)  # 11.2 px/mm
+        img = load_calibrated(r.path, r.ppm, 224 / 24)  # the finest cache density
         h, w = img.shape[:2]
-        for mm in (10, 20, 40):
-            t = int(mm * 224 / 20)
+        for mm in (24, 48, 96):
+            t = int(mm * 224 / 24)
             crop = img[h // 2 - t // 2: h // 2 + t // 2, w // 2 - t // 2: w // 2 + t // 2]
             Image.fromarray(crop).resize((224, 224), Image.BICUBIC).save(th / f"{r.photo}__{mm}mm.jpg", quality=90)
 
@@ -76,7 +72,7 @@ def main() -> None:
     data_dir = ROOT / d["dir"]
     res = ROOT / "results/data"
     res.mkdir(parents=True, exist_ok=True)
-    photos = index_photos(data_dir)
+    photos = index_photos(data_dir, d.get("extra_ppm"))
     photos.to_csv(res / "photos_index.csv", index=False)
     labels = load_labels(data_dir)
     labels.to_csv(res / "labels.csv", index=False)

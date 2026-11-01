@@ -11,6 +11,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from PIL import Image
 from tqdm import tqdm
 
 from .metric import COLS, d_value
@@ -60,32 +61,49 @@ def _ppm_col(ppm: pd.DataFrame) -> str:
 
 
 def _key(s: str) -> str:
-    return re.sub(r"[^a-z0-9]", "", s.lower())
+    s = s.lower().replace("ü", "ue").replace("ö", "oe").replace("ä", "ae").replace("ß", "ss")
+    return re.sub(r"[^a-z0-9]", "", s)
 
 
-def index_photos(data_dir: Path) -> pd.DataFrame:
-    """Every photo with its split, sample_id, camera and pixels-per-mm."""
+def _strip_photo_suffix(stem: str) -> str:
+    """'iPhone14_HPC_Audorfring (3)' -> 'iPhone14_HPC_Audorfring', 'Motorola_Edge_F827_01' -> 'Motorola_Edge_F827'."""
+    return re.sub(r"(\s*\(\d+\)|_\d{1,2})$", "", stem)
+
+
+def index_photos(data_dir: Path, extra_ppm: dict[str, float] | None = None) -> pd.DataFrame:
+    """Every photo with its split, sample_id, camera and pixels-per-mm.
+
+    ppm.csv gives ppm at the camera's native resolution (width x height); photos stored at a lower resolution
+    (e.g. 1600 px instead of 4000) get ppm scaled by the size ratio. Cameras missing from ppm.csv take their
+    value from `extra_ppm` (pixels per mm at the stored resolution)."""
     labels, test_ids, ppm = load_labels(data_dir), load_test_ids(data_dir), load_ppm(data_dir)
-    cam_col, ppm_col = _camera_col(ppm), _ppm_col(ppm)
-    cams = sorted(ppm[cam_col].astype(str), key=lambda c: -len(_key(c)))
-    ids = {**{s: "train" for s in labels.sample_id}, **{s: "test" for s in test_ids}}
+    cam_col = _camera_col(ppm)
+    ref = {_key(r[cam_col]): r for _, r in ppm.iterrows()}
+    extra = {_key(k): v for k, v in (extra_ppm or {}).items()}
+    cams = sorted(set(ref) | set(extra), key=len, reverse=True)
+    ids = {**{_key(s): (s, "train") for s in labels.sample_id}, **{_key(s): (s, "test") for s in test_ids}}
     rows = []
     for p in sorted(data_dir.rglob("*")):
         if p.suffix.lower() not in IMG_EXT:
             continue
-        tokens = re.split(r"[^A-Za-z0-9]+", p.stem)
-        sid = next((t for t in tokens if t in ids), None)
-        if sid is None:  # ids may contain separators themselves
-            sid = next((s for s in sorted(ids, key=len, reverse=True) if s in p.stem), None)
-        cam = next((c for c in cams if _key(c) in _key(p.stem)), None)
-        rows.append({"photo": p.stem, "path": str(p), "sample_id": sid, "split": ids.get(sid),
-                     "camera": cam})
+        key = _key(_strip_photo_suffix(p.stem))
+        cam = next((c for c in cams if key.startswith(c)), None)
+        rest = key[len(cam):] if cam else key
+        sid, split = ids.get(rest, (None, None))
+        with Image.open(p) as im:
+            w, h = im.size
+        if cam in ref:
+            r = ref[cam]
+            ppm_v = float(r["ppm"]) * max(w, h) / max(float(r["width"]), float(r["height"]))
+        else:
+            ppm_v = extra.get(cam, np.nan)
+        rows.append({"photo": p.stem, "path": str(p), "sample_id": sid, "split": split, "camera": cam,
+                     "width": w, "height": h, "ppm": ppm_v})
     df = pd.DataFrame(rows)
-    bad = df[df.sample_id.isna() | df.camera.isna()]
+    bad = df[df.sample_id.isna() | df.camera.isna() | df.ppm.isna()]
     if len(bad):
-        raise ValueError(f"cannot parse {len(bad)} photo names, e.g. {bad.photo.head(5).tolist()}")
-    df["ppm"] = df.camera.map(dict(zip(ppm[cam_col].astype(str), ppm[ppm_col].astype(float))))
-    return df
+        print(f"WARNING: dropping {len(bad)} photos without sample/camera/ppm: {bad.photo.head(8).tolist()}")
+    return df.drop(bad.index).reset_index(drop=True)
 
 
 def make_folds(labels: pd.DataFrame, k: int, seed: int = 0) -> pd.DataFrame:

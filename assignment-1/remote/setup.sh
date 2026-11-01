@@ -2,7 +2,10 @@
 # One-time pod setup: uv + locked env, competition data (Kaggle API), sanity checks.
 set -euo pipefail
 cd /workspace/a1
-export PATH=$HOME/.local/bin:$PATH HF_HOME=/workspace/hf
+export PATH=$HOME/.local/bin:$PATH HF_HOME=/root/hf UV_PROJECT_ENVIRONMENT=/root/venv UV_CACHE_DIR=/root/uvcache
+mkdir -p /root/a1data/data /root/a1data/cache
+[ -e data ] || ln -s /root/a1data/data data
+[ -e cache ] || ln -s /root/a1data/cache cache
 set -a; [ -f .env ] && . ./.env; set +a
 command -v uv >/dev/null || curl -LsSf https://astral.sh/uv/install.sh | sh
 uv sync --frozen
