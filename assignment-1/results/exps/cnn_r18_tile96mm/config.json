@@ -1,0 +1,19 @@
+{
+ "batch": 32,
+ "steps": 600,
+ "opt": "adamw",
+ "lr": 0.0003,
+ "wd": 0.05,
+ "warmup": 0.1,
+ "sched": "cosine",
+ "aug": "basic",
+ "sampler": "by_sample",
+ "norm": "default",
+ "mode": "ft",
+ "drop_path": 0.0,
+ "no_wd_norm_bias": true,
+ "seed": 0,
+ "family": "cnn",
+ "arch": "resnet18.tv_in1k",
+ "tile_mm": 96
+}

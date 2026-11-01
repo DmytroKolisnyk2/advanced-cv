@@ -1,0 +1,4 @@
+name,file,date,status,public,private
+vit_scratch,vit_scratch.csv,2026-11-01 19:49:46.263000,SubmissionStatus.COMPLETE,79.34509,
+base_train_mean,base_train_mean.csv,2026-11-01 19:18:13.323000,SubmissionStatus.COMPLETE,102.3724,
+cnn_r18_bs8_grouped_frozenbn,cnn_r18_bs8_grouped_frozenbn.csv,2026-11-01 19:18:09.490000,SubmissionStatus.COMPLETE,86.28936,

@@ -1,0 +1,23 @@
+{
+ "batch": 32,
+ "steps": 600,
+ "opt": "adamw",
+ "lr": 0.0003,
+ "wd": 0.05,
+ "warmup": 0.1,
+ "sched": "cosine",
+ "aug": "basic",
+ "sampler": "by_sample",
+ "norm": "default",
+ "mode": "ft",
+ "drop_path": 0.0,
+ "no_wd_norm_bias": true,
+ "seed": 0,
+ "family": "ssl",
+ "type": "frozen",
+ "arch": "vit_small_patch14_dinov2.lvd142m",
+ "init_ckpt": "/workspace/a1/checkpoints/da_dinov2_s/backbone.pt",
+ "tile_mm": 48,
+ "head": "ridge",
+ "features": "block8"
+}

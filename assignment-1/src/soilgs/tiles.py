@@ -61,7 +61,7 @@ def tile_photo(path: str, ppm: float, tile_mm: float, out_px: int = 224, overlap
     """Tiles of one photo.
 
     ppm_error  - the pipeline believes ppm * ppm_error (a mis-calibrated scale): each tile then covers
-                 tile_mm / ppm_error of real soil, so grains look ppm_error times larger or smaller.
+                 tile_mm * ppm_error of real soil, so grains look ppm_error times smaller.
     resolution - the photo was taken at `resolution` x the pixel density with the correct ppm: tiles cover the
                  right physical area but carry less detail (down- then up-sampled).
     """

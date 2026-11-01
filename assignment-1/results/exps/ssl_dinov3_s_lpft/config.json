@@ -1,0 +1,21 @@
+{
+ "batch": 32,
+ "steps": 600,
+ "opt": "adamw",
+ "lr": 2e-05,
+ "wd": 0.05,
+ "warmup": 0.1,
+ "sched": "cosine",
+ "aug": "basic",
+ "sampler": "by_sample",
+ "norm": "default",
+ "mode": "lpft",
+ "drop_path": 0.1,
+ "no_wd_norm_bias": true,
+ "seed": 0,
+ "family": "ssl",
+ "arch": "vit_small_patch16_dinov3.lvd1689m",
+ "lp_steps": 300,
+ "layer_decay": 0.75,
+ "tile_mm": 48
+}

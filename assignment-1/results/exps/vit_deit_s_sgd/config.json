@@ -1,0 +1,20 @@
+{
+ "batch": 32,
+ "steps": 600,
+ "opt": "sgd",
+ "lr": 0.01,
+ "wd": 0.0001,
+ "warmup": 0.1,
+ "sched": "cosine",
+ "aug": "basic",
+ "sampler": "by_sample",
+ "norm": "default",
+ "mode": "ft",
+ "drop_path": 0.1,
+ "no_wd_norm_bias": true,
+ "seed": 0,
+ "family": "vit",
+ "arch": "deit_small_patch16_224.fb_in1k",
+ "layer_decay": 0.75,
+ "tile_mm": 48
+}

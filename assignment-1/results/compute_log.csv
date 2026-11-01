@@ -1,0 +1,20 @@
+name,family,gpu,gpu_hours,peak_mem_gb,params_m,trainable_m
+ctrl_colour_only,baseline,cpu,0.0,0.0,,
+base_train_mean,baseline,cpu,0.0,0.0,,
+ctrl_camera_only,baseline,cpu,0.0,0.0,,
+base_uniform,baseline,cpu,0.0,0.0,,
+cnn_r18_bs8_grouped_frozenbn,cnn,NVIDIA GeForce RTX 4090,0.0531,3.21,11.18,11.173
+cnn_r18_groupnorm,cnn,NVIDIA GeForce RTX 4090,0.0185,5.03,11.18,11.182
+cnn_r18_frozenbn,cnn,NVIDIA GeForce RTX 4090,0.0147,3.21,11.18,11.173
+cnn_r18_sgd,cnn,NVIDIA GeForce RTX 4090,0.0158,3.21,11.18,11.182
+cnn_r50_adamw,cnn,NVIDIA GeForce RTX 4090,0.0349,3.75,23.53,23.531
+cnn_r18_noaug,cnn,NVIDIA GeForce RTX 4090,0.0152,3.21,11.18,11.182
+cnn_r18_tile24mm,cnn,NVIDIA GeForce RTX 4090,0.0155,2.36,11.18,11.182
+cnn_r18_const_nowarm,cnn,NVIDIA GeForce RTX 4090,0.0164,3.21,11.18,11.182
+cnn_r18_img112,cnn,NVIDIA GeForce RTX 4090,0.0152,2.46,11.18,11.182
+cnn_effb0_adamw,cnn,NVIDIA GeForce RTX 4090,0.0957,3.71,4.02,4.022
+cnn_r18_tile96mm,cnn,NVIDIA GeForce RTX 4090,0.0151,1.2,11.18,11.182
+cnn_r18_adamw,cnn,NVIDIA GeForce RTX 4090,0.0176,3.21,11.18,11.182
+cnn_convnext_t_adamw,cnn,NVIDIA GeForce RTX 4090,0.0712,4.52,27.83,27.829
+cnn_r18_strongaug,cnn,NVIDIA GeForce RTX 4090,0.0147,3.21,11.18,11.182
+cnn_r18_bs8_grouped,cnn,NVIDIA GeForce RTX 4090,0.056,3.21,11.18,11.182
