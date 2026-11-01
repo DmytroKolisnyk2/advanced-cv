@@ -1,4 +1,6 @@
 name,file,date,status,public,private
+ens_top5,ens_top5.csv,2026-11-01 20:29:19.383000,SubmissionStatus.COMPLETE,77.0829,
+ssl_dinov3_s_ft,ssl_dinov3_s_ft.csv,2026-11-01 20:29:15.200000,SubmissionStatus.COMPLETE,79.8533,
 vit_scratch,vit_scratch.csv,2026-11-01 19:49:46.263000,SubmissionStatus.COMPLETE,79.34509,
 base_train_mean,base_train_mean.csv,2026-11-01 19:18:13.323000,SubmissionStatus.COMPLETE,102.3724,
 cnn_r18_bs8_grouped_frozenbn,cnn_r18_bs8_grouped_frozenbn.csv,2026-11-01 19:18:09.490000,SubmissionStatus.COMPLETE,86.28936,

@@ -30,6 +30,20 @@ Validation uses 6 group folds over physical samples, stratified by D50.
   sharper JPEGs, even after resampling. *Prediction:* the public LB is worse than CV for every family, and models
   that rely more on colour (CNNs with weak augmentation) lose more than texture-based ones.
 
+### Outcome (block 0)
+
+- H0.1 **confirmed.** A wrong ppm by x2 / x0.5 costs +4 to +10 EMD (CNN +6 / +10, DINOv3 FT +4 / +6, inside the predicted
+  5-20). The 30 EMD of a pure shift is not reached, because the models are only partly scale-sensitive.
+- H0.2 **wrong in the important part.** Fine soils are not the hardest (EMD 32-35). The 4 sands are (about 60 for every
+  family). Fine soils are easy to recognise as a group by colour and lack of clasts. Sands are rare and lie between the
+  two modes, so every model pulls them towards "fine".
+- H0.3 **wrong.** The best model improves on the training mean by 61% (86.6 -> 34.1), not 20-35%: the curves are
+  bimodal, so recognising fine vs gravel already removes most of the error.
+- H0.4 **confirmed.** Camera-only 87.1 vs training mean 86.6.
+- H0.5 **confirmed.** CV 34-36 -> public LB 77-86 for all families. The training mean also gets worse (86.6 -> 102.4),
+  so part of the gap is that the 3 public soils are atypical, not only the cameras. The colour-reliant scratch ViT
+  did not lose more than the texture models (+44 vs +46-50), contrary to the second half of H0.5.
+
 ## Block 1: CNNs
 
 - **H1.1** AdamW and SGD+momentum give ResNet-18 the same result within one fold-std. A pretrained CNN with
@@ -47,6 +61,17 @@ Validation uses 6 group folds over physical samples, stratified by D50.
 - **H1.6** Strong augmentation (blur, noise, stronger colour jitter) hurts. Blur changes the apparent texture
   scale, which is close to changing the label.
 
+### Outcome (block 1)
+
+- H1.1 **confirmed.** SGD 40.3 vs AdamW 43.3, well inside the fold std (about 20).
+- H1.2 **confirmed, stronger than predicted.** 2-soil batches: trainable BN 50.9 vs frozen BN 35.9 (+15, predicted +2).
+  Frozen BN (39.5) and GroupNorm (37.5) are also better than trainable BN with normal batches (43.3).
+- H1.3 **wrong direction, not significant.** ResNet-50 41.4, EfficientNet-B0 42.8 and ConvNeXt-T 44.6 (AdamW) / 39.5
+  (SGD) are not better than ResNet-18. With 20 training soils, extra capacity is not used.
+- H1.4 **partly.** 48 mm (43.3) ≈ 24 mm (41.9) ≈ 96 mm (43.1). Tile size barely matters at this resolution.
+- H1.5 **wrong.** 112 px gives 42.5 vs 43.3. The models do not use detail finer than about 0.4 mm.
+- H1.6 **confirmed.** Strong augmentation 46.1 vs 43.3.
+
 ## Block 2: ViTs
 
 - **H2.1** A ViT trained from scratch on about 20 samples reaches about the training-mean baseline. It has no
@@ -61,6 +86,17 @@ Validation uses 6 group folds over physical samples, stratified by D50.
 - **H2.4** Swin-T and MaxViT-T (local attention, convolutional stem in MaxViT) are better than DeiT-S on this
   texture task.
 
+### Outcome (block 2)
+
+- H2.1 **wrong.** The scratch ViT is the best ViT (35.3) and pretrained DeiT-S the worst fine-tuned model (45.6). The grey
+  control (35.3 -> 48.8) shows that the scratch ViT is mostly a colour model, which 20 soils are enough to learn.
+  Fine-tuning DeiT-S moves its features away from ImageNet without enough data to learn better ones. Frozen DeiT-S
+  + k-NN (38.0) and SGD fine-tuning (40.2) confirm that the damage comes from the fine-tuning.
+- H2.2 **wrong.** SGD beats AdamW on DeiT-S (40.2 vs 45.6). Here the problem is not reaching a minimum but not drifting too
+  far from the pretrained one; SGD's smaller effective steps help.
+- H2.3 **confirmed in size, not in sign.** No warmup +0.7, no LLRD +0.2, WD on everything -0.1: all far below the noise.
+- H2.4 **confirmed.** Swin-T 42.8 and MaxViT-T 42.3 vs DeiT-S 45.6.
+
 ## Block 3: self-supervised encoders
 
 - **H3.1** Frozen DINOv2-S / DINOv3-S features with a ridge head on per-sample mean features come within 1-2 EMD
@@ -74,6 +110,16 @@ Validation uses 6 group folds over physical samples, stratified by D50.
   (random-resized crops, zoom, blur) destroy the label; we use only dihedral flips/rotations, mild colour jitter and
   local crops cut without resizing.
 
+### Outcome (block 3)
+
+- H3.1 **confirmed.** Frozen DINOv3 + k-NN 36.6 vs best CNN 35.9, with the lowest fold std of all runs (10.5).
+- H3.2 **partly.** The mean patch token is not better than [CLS] (42.4 vs 42.6 for DINOv2). Block 4 is the best ridge
+  feature for DINOv2 and DeiT-S, block 8 is not.
+- H3.3 **confirmed for DINOv2, wrong for DINOv3.** DINOv2: LP-FT 40.7 (CKA 0.84) better than FT 44.1 (CKA 0.68) and
+  LoRA 46.5 (CKA 0.65). DINOv3: FT 34.1 (CKA 0.80) is the best single model, and LP-FT moves too little (CKA 0.97, 37.7).
+- H3.4 **wrong in an interesting way.** The adaptation hurt the last-layer features (ridge 42.5 -> 48.2, monotonically
+  over the run), LP-FT and LoRA, and helped block-4 features (40.6 -> 36.5) and k-NN (39.2 -> 37.3).
+
 ## Block 4: interpretation and controls
 
 - **H4.1** For coarse soils the maps of all three families focus on large grains and grain boundaries. For fine
@@ -82,8 +128,23 @@ Validation uses 6 group folds over physical samples, stratified by D50.
   raises EMD only slightly (the models use texture statistics more than layout). A colour-statistics-only ridge
   lands between the training mean and the image models.
 
+### Outcome (block 4)
+
+- H4.1 **confirmed for coarse soils.** CNN Grad-CAM covers the large clasts; ViT rollouts sit on individual grains. On
+  fine soils the CNN fires on the few largest grains instead of being diffuse.
+- H4.2 **partly.** Shuffling 12 mm blocks changes every model by < 1 EMD (confirmed). Grey input clearly hurts only the
+  scratch ViT (+13.5) and frozen ridge features; the best CNN and DINOv3 FT do not change. Colour-only ridge (49.7) lies
+  between the training mean and the image models (confirmed).
+
 ## Blocks 6-7: robustness and ensemble
 
 - **H6** Halving the pixel density at the correct ppm costs the CNN less than the ViTs (16 px patches lose more).
 - **H7** OOF errors of the family-best models are highly correlated (> 0.7) because all of them fail on the same
   fine soils. An equal-weight ensemble of diverse models gains 3-8% over the best single model.
+
+### Outcome (blocks 6-7)
+
+- H6 **wrong.** At a quarter of the pixel density the CNN loses +3.4, the scratch ViT +10.2, and DINOv3 FT only +1.7. The
+  pretrained SSL ViT is the most robust; only the from-scratch ViT is fragile.
+- H7 **confirmed on correlation, smaller gain.** Family-best errors correlate at 0.89-0.98. The equal-weight top-5 blend
+  gains 1.6% in CV (34.06 -> 33.53) and 3.5% on the public LB (79.85 -> 77.08), below the predicted 3-8% in CV.

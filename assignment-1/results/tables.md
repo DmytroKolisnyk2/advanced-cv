@@ -7,102 +7,102 @@ CV = mean ± std over the 6 group folds of the per-sample log-EMD (lower is bett
 
 | name             | CV (mean ± std)   |   D50_err_dec |   lb_public |   gpu_hours |   peak_mem_gb | setup   |
 |:-----------------|:------------------|--------------:|------------:|------------:|--------------:|:--------|
-| ctrl_colour_only | 49.689 ± 15.760   |         0.424 |         nan |       0.000 |         0.000 |         |
-| base_train_mean  | 86.632 ± 3.037    |         0.923 |         nan |       0.000 |         0.000 |         |
-| ctrl_camera_only | 87.055 ± 2.713    |         0.929 |         nan |       0.000 |         0.000 |         |
-| base_uniform     | 102.020 ± 5.477   |         0.914 |         nan |       0.000 |         0.000 |         |
+| ctrl_colour_only | 49.689 ± 15.760   |         0.424 |     nan     |       0.000 |         0.000 |         |
+| base_train_mean  | 86.632 ± 3.037    |         0.923 |     102.372 |       0.000 |         0.000 |         |
+| ctrl_camera_only | 87.055 ± 2.713    |         0.929 |     nan     |       0.000 |         0.000 |         |
+| base_uniform     | 102.020 ± 5.477   |         0.914 |     nan     |       0.000 |         0.000 |         |
 
 
 ## Part 1 — CNNs
 
 | name                         | CV (mean ± std)   |   D50_err_dec |   lb_public |   gpu_hours |   peak_mem_gb | setup                                                                                                    |
 |:-----------------------------|:------------------|--------------:|------------:|------------:|--------------:|:---------------------------------------------------------------------------------------------------------|
-| cnn_r18_bs8_grouped_frozenbn | 35.878 ± 17.187   |         0.313 |         nan |       0.053 |         3.210 | opt=adamw, lr=0.0003, norm=frozen_bn, aug=basic, sampler=grouped, batch=8, mode=ft, tile_mm=48           |
-| cnn_r18_groupnorm            | 37.527 ± 16.186   |         0.330 |         nan |       0.018 |         5.030 | opt=adamw, lr=0.0003, norm=groupnorm, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48        |
-| cnn_r18_frozenbn             | 39.497 ± 18.297   |         0.337 |         nan |       0.015 |         3.210 | opt=adamw, lr=0.0003, norm=frozen_bn, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48        |
-| cnn_convnext_t_sgd           | 39.525 ± 18.650   |         0.351 |         nan |       0.036 |         4.520 | opt=sgd, lr=0.01, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48              |
-| cnn_r18_sgd                  | 40.340 ± 21.109   |         0.363 |         nan |       0.016 |         3.210 | opt=sgd, lr=0.01, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48              |
-| cnn_r50_adamw                | 41.354 ± 18.897   |         0.364 |         nan |       0.035 |         3.750 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| cnn_r18_noaug                | 41.422 ± 16.618   |         0.373 |         nan |       0.015 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=none, sampler=by_sample, batch=32, mode=ft, tile_mm=48           |
-| cnn_r18_tile24mm             | 41.894 ± 19.339   |         0.382 |         nan |       0.015 |         2.360 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=24          |
-| cnn_r18_const_nowarm         | 42.205 ± 17.394   |         0.372 |         nan |       0.016 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| cnn_r18_img112               | 42.464 ± 19.404   |         0.371 |         nan |       0.015 |         2.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, img=112, tile_mm=48 |
-| cnn_effb0_adamw              | 42.798 ± 18.207   |         0.384 |         nan |       0.096 |         3.710 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| cnn_r18_tile96mm             | 43.072 ± 17.428   |         0.387 |         nan |       0.015 |         1.200 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=96          |
-| cnn_r18_adamw                | 43.280 ± 20.463   |         0.390 |         nan |       0.018 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| cnn_convnext_t_adamw         | 44.576 ± 20.304   |         0.398 |         nan |       0.071 |         4.520 | opt=adamw, lr=0.0001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| cnn_r18_strongaug            | 46.087 ± 22.261   |         0.432 |         nan |       0.015 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=strong, sampler=by_sample, batch=32, mode=ft, tile_mm=48         |
-| cnn_r18_bs8_grouped          | 50.851 ± 22.334   |         0.481 |         nan |       0.056 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=grouped, batch=8, mode=ft, tile_mm=48             |
+| cnn_r18_bs8_grouped_frozenbn | 35.878 ± 17.187   |         0.313 |      86.289 |       0.053 |         3.210 | opt=adamw, lr=0.0003, norm=frozen_bn, aug=basic, sampler=grouped, batch=8, mode=ft, tile_mm=48           |
+| cnn_r18_groupnorm            | 37.527 ± 16.186   |         0.330 |     nan     |       0.018 |         5.030 | opt=adamw, lr=0.0003, norm=groupnorm, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48        |
+| cnn_r18_frozenbn             | 39.497 ± 18.297   |         0.337 |     nan     |       0.015 |         3.210 | opt=adamw, lr=0.0003, norm=frozen_bn, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48        |
+| cnn_convnext_t_sgd           | 39.525 ± 18.650   |         0.351 |     nan     |       0.036 |         4.520 | opt=sgd, lr=0.01, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48              |
+| cnn_r18_sgd                  | 40.340 ± 21.109   |         0.363 |     nan     |       0.016 |         3.210 | opt=sgd, lr=0.01, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48              |
+| cnn_r50_adamw                | 41.354 ± 18.897   |         0.364 |     nan     |       0.035 |         3.750 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| cnn_r18_noaug                | 41.422 ± 16.618   |         0.373 |     nan     |       0.015 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=none, sampler=by_sample, batch=32, mode=ft, tile_mm=48           |
+| cnn_r18_tile24mm             | 41.894 ± 19.339   |         0.382 |     nan     |       0.015 |         2.360 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=24          |
+| cnn_r18_const_nowarm         | 42.205 ± 17.394   |         0.372 |     nan     |       0.016 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| cnn_r18_img112               | 42.464 ± 19.404   |         0.371 |     nan     |       0.015 |         2.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, img=112, tile_mm=48 |
+| cnn_effb0_adamw              | 42.798 ± 18.207   |         0.384 |     nan     |       0.096 |         3.710 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| cnn_r18_tile96mm             | 43.072 ± 17.428   |         0.387 |     nan     |       0.015 |         1.200 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=96          |
+| cnn_r18_adamw                | 43.280 ± 20.463   |         0.390 |     nan     |       0.018 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| cnn_convnext_t_adamw         | 44.576 ± 20.304   |         0.398 |     nan     |       0.071 |         4.520 | opt=adamw, lr=0.0001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| cnn_r18_strongaug            | 46.087 ± 22.261   |         0.432 |     nan     |       0.015 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=strong, sampler=by_sample, batch=32, mode=ft, tile_mm=48         |
+| cnn_r18_bs8_grouped          | 50.851 ± 22.334   |         0.481 |     nan     |       0.056 |         3.210 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=grouped, batch=8, mode=ft, tile_mm=48             |
 
 
 ## Part 2 — ViTs
 
 | name                 | CV (mean ± std)   |   D50_err_dec |   lb_public |   gpu_hours |   peak_mem_gb | setup                                                                                                                      |
 |:---------------------|:------------------|--------------:|------------:|------------:|--------------:|:---------------------------------------------------------------------------------------------------------------------------|
-| vit_scratch          | 35.280 ± 17.046   |         0.302 |         nan |       0.038 |         2.530 | opt=adamw, lr=0.0005, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                            |
-| vit_deit_s_sgd       | 40.226 ± 20.866   |         0.351 |         nan |       0.030 |         3.330 | opt=sgd, lr=0.01, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48              |
-| vit_maxvit_t         | 42.268 ± 19.321   |         0.381 |         nan |       0.141 |         7.600 | opt=adamw, lr=0.0001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                            |
-| vit_deit_s_img112    | 42.396 ± 19.926   |         0.384 |         nan |       0.033 |         2.640 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, img=112, tile_mm=48 |
-| vit_swin_t           | 42.764 ± 21.414   |         0.393 |         nan |       0.052 |         5.470 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| vit_deit_s_strongaug | 44.426 ± 20.994   |         0.398 |         nan |       0.036 |         3.410 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=strong, sampler=by_sample, batch=32, mode=ft, tile_mm=48         |
-| vit_deit_s_wd_all    | 45.522 ± 20.240   |         0.418 |         nan |       0.031 |         3.410 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| vit_deit_s           | 45.627 ± 20.508   |         0.419 |         nan |       0.032 |         3.400 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| vit_deit_s_nollrd    | 45.848 ± 18.826   |         0.427 |         nan |       0.030 |         3.410 | opt=adamw, lr=0.0001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                            |
-| vit_deit_s_nowarm    | 46.344 ± 20.437   |         0.426 |         nan |       0.033 |         3.410 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
-| vit_deit_s_dp0       | 47.675 ± 18.989   |         0.440 |         nan |       0.032 |         3.410 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| vit_scratch          | 35.280 ± 17.046   |         0.302 |      79.345 |       0.038 |         2.530 | opt=adamw, lr=0.0005, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                            |
+| vit_deit_s_sgd       | 40.226 ± 20.866   |         0.351 |     nan     |       0.030 |         3.330 | opt=sgd, lr=0.01, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48              |
+| vit_maxvit_t         | 42.268 ± 19.321   |         0.381 |     nan     |       0.141 |         7.600 | opt=adamw, lr=0.0001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                            |
+| vit_deit_s_img112    | 42.396 ± 19.926   |         0.384 |     nan     |       0.033 |         2.640 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, img=112, tile_mm=48 |
+| vit_swin_t           | 42.764 ± 21.414   |         0.393 |     nan     |       0.052 |         5.470 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| vit_deit_s_strongaug | 44.426 ± 20.994   |         0.398 |     nan     |       0.036 |         3.410 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=strong, sampler=by_sample, batch=32, mode=ft, tile_mm=48         |
+| vit_deit_s_wd_all    | 45.522 ± 20.240   |         0.418 |     nan     |       0.031 |         3.410 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| vit_deit_s           | 45.627 ± 20.508   |         0.419 |     nan     |       0.032 |         3.400 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| vit_deit_s_nollrd    | 45.848 ± 18.826   |         0.427 |     nan     |       0.030 |         3.410 | opt=adamw, lr=0.0001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                            |
+| vit_deit_s_nowarm    | 46.344 ± 20.437   |         0.426 |     nan     |       0.033 |         3.410 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
+| vit_deit_s_dp0       | 47.675 ± 18.989   |         0.440 |     nan     |       0.032 |         3.410 | opt=adamw, lr=0.0001, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48          |
 
 
 ## Part 3 — self-supervised encoders
 
 | name                       | CV (mean ± std)   |   D50_err_dec |   lb_public |   gpu_hours |   peak_mem_gb | setup                                                                                                                           |     cka |
 |:---------------------------|:------------------|--------------:|------------:|------------:|--------------:|:--------------------------------------------------------------------------------------------------------------------------------|--------:|
-| ssl_dinov3_s_ft            | 34.059 ± 16.043   |         0.286 |         nan |       0.048 |         3.710 | opt=adamw, lr=5e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                |   0.802 |
-| dinov2_s_da_ridge_block4   | 36.508 ± 12.872   |         0.290 |         nan |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block4, tile_mm=48    | nan     |
-| dinov3_s_knn_clspatch      | 36.564 ± 10.473   |         0.305 |         nan |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=knn, features=cls+patch, tile_mm=48   | nan     |
-| dinov2_s_da_knn_clspatch   | 37.331 ± 13.412   |         0.321 |         nan |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=knn, features=cls+patch, tile_mm=48   | nan     |
-| ssl_dinov3_s_lpft          | 37.693 ± 17.814   |         0.326 |         nan |       0.056 |         3.710 | opt=adamw, lr=2e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lpft, tile_mm=48              |   0.966 |
-| deit_s_knn_clspatch        | 37.966 ± 13.966   |         0.320 |         nan |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=knn, features=cls+patch, tile_mm=48   | nan     |
-| dinov2_s_knn_clspatch      | 39.227 ± 13.032   |         0.327 |         nan |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=knn, features=cls+patch, tile_mm=48   | nan     |
-| deit_s_ridge_block4        | 40.588 ± 16.638   |         0.345 |         nan |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block4, tile_mm=48    | nan     |
-| dinov2_s_ridge_block4      | 40.606 ± 17.393   |         0.325 |         nan |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block4, tile_mm=48    | nan     |
-| ssl_dinov2_s_lpft          | 40.700 ± 20.682   |         0.375 |         nan |       0.043 |         3.840 | opt=adamw, lr=2e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lpft, tile_mm=48              |   0.839 |
-| deit_s_ridge_block8        | 40.860 ± 17.068   |         0.344 |         nan |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block8, tile_mm=48    | nan     |
-| deit_s_lp_clspatch         | 41.384 ± 19.258   |         0.354 |         nan |       0.001 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=lp, features=cls+patch, tile_mm=48    | nan     |
-| dinov3_s_ridge_cls         | 41.433 ± 15.368   |         0.330 |         nan |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls, tile_mm=48       | nan     |
-| deit_s_ridge_patch         | 41.707 ± 16.169   |         0.334 |         nan |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=patch, tile_mm=48     | nan     |
-| dinov3_s_ridge_clspatch    | 41.760 ± 16.889   |         0.328 |         nan |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls+patch, tile_mm=48 | nan     |
-| deit_s_ridge_clspatch      | 41.885 ± 17.533   |         0.361 |         nan |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls+patch, tile_mm=48 | nan     |
-| dinov3_s_ridge_patch       | 42.046 ± 17.249   |         0.329 |         nan |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=patch, tile_mm=48     | nan     |
-| dinov2_s_ridge_patch       | 42.430 ± 15.250   |         0.337 |         nan |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=patch, tile_mm=48     | nan     |
-| dinov2_s_ridge_clspatch    | 42.466 ± 15.823   |         0.338 |         nan |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls+patch, tile_mm=48 | nan     |
-| dinov2_s_ridge_cls         | 42.631 ± 15.415   |         0.339 |         nan |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls, tile_mm=48       | nan     |
-| dinov3_s_ridge_block4      | 42.876 ± 15.690   |         0.362 |         nan |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block4, tile_mm=48    | nan     |
-| dinov2_s_ridge_block8      | 43.041 ± 16.322   |         0.337 |         nan |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block8, tile_mm=48    | nan     |
-| dinov3_s_ridge_block8      | 43.481 ± 17.434   |         0.343 |         nan |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block8, tile_mm=48    | nan     |
-| ssl_dinov2_s_ft            | 44.089 ± 21.964   |         0.397 |         nan |       0.037 |         3.850 | opt=adamw, lr=5e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                |   0.683 |
-| dinov2_s_lp_clspatch       | 44.283 ± 16.658   |         0.395 |         nan |       0.002 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=lp, features=cls+patch, tile_mm=48    | nan     |
-| dinov2_s_da_ridge_block8   | 44.313 ± 15.742   |         0.351 |         nan |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block8, tile_mm=48    | nan     |
-| ssl_dinov3_s_lora          | 44.895 ± 21.064   |         0.429 |         nan |       0.048 |         3.070 | opt=adamw, lr=0.001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lora, tile_mm=48                                |   0.694 |
-| dinov3_s_lp_clspatch       | 45.036 ± 17.564   |         0.395 |         nan |       0.002 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=lp, features=cls+patch, tile_mm=48    | nan     |
-| deit_s_ridge_cls           | 45.201 ± 20.007   |         0.391 |         nan |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls, tile_mm=48       | nan     |
-| dinov2_s_da_lp_clspatch    | 45.792 ± 17.431   |         0.404 |         nan |       0.002 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=lp, features=cls+patch, tile_mm=48    | nan     |
-| ssl_dinov2_s_lora          | 46.539 ± 21.161   |         0.441 |         nan |       0.036 |         3.130 | opt=adamw, lr=0.001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lora, tile_mm=48                                |   0.647 |
-| dinov2_s_da_ridge_patch    | 46.943 ± 15.203   |         0.383 |         nan |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=patch, tile_mm=48     | nan     |
-| ssl_dinov2_s_da_lpft       | 47.469 ± 19.303   |         0.443 |         nan |       0.044 |         3.850 | opt=adamw, lr=2e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lpft, tile_mm=48              |   0.868 |
-| dinov2_s_da_ridge_clspatch | 48.168 ± 14.346   |         0.404 |         nan |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls+patch, tile_mm=48 | nan     |
-| ssl_dinov2_s_da_lora       | 48.942 ± 17.979   |         0.463 |         nan |       0.035 |         3.130 | opt=adamw, lr=0.001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lora, tile_mm=48                                |   0.622 |
-| dinov2_s_da_ridge_cls      | 49.502 ± 14.554   |         0.430 |         nan |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls, tile_mm=48       | nan     |
+| ssl_dinov3_s_ft            | 34.059 ± 16.043   |         0.286 |      79.853 |       0.048 |         3.710 | opt=adamw, lr=5e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                |   0.802 |
+| dinov2_s_da_ridge_block4   | 36.508 ± 12.872   |         0.290 |     nan     |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block4, tile_mm=48    | nan     |
+| dinov3_s_knn_clspatch      | 36.564 ± 10.473   |         0.305 |     nan     |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=knn, features=cls+patch, tile_mm=48   | nan     |
+| dinov2_s_da_knn_clspatch   | 37.331 ± 13.412   |         0.321 |     nan     |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=knn, features=cls+patch, tile_mm=48   | nan     |
+| ssl_dinov3_s_lpft          | 37.693 ± 17.814   |         0.326 |     nan     |       0.056 |         3.710 | opt=adamw, lr=2e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lpft, tile_mm=48              |   0.966 |
+| deit_s_knn_clspatch        | 37.966 ± 13.966   |         0.320 |     nan     |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=knn, features=cls+patch, tile_mm=48   | nan     |
+| dinov2_s_knn_clspatch      | 39.227 ± 13.032   |         0.327 |     nan     |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=knn, features=cls+patch, tile_mm=48   | nan     |
+| deit_s_ridge_block4        | 40.588 ± 16.638   |         0.345 |     nan     |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block4, tile_mm=48    | nan     |
+| dinov2_s_ridge_block4      | 40.606 ± 17.393   |         0.325 |     nan     |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block4, tile_mm=48    | nan     |
+| ssl_dinov2_s_lpft          | 40.700 ± 20.682   |         0.375 |     nan     |       0.043 |         3.840 | opt=adamw, lr=2e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lpft, tile_mm=48              |   0.839 |
+| deit_s_ridge_block8        | 40.860 ± 17.068   |         0.344 |     nan     |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block8, tile_mm=48    | nan     |
+| deit_s_lp_clspatch         | 41.384 ± 19.258   |         0.354 |     nan     |       0.001 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=lp, features=cls+patch, tile_mm=48    | nan     |
+| dinov3_s_ridge_cls         | 41.433 ± 15.368   |         0.330 |     nan     |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls, tile_mm=48       | nan     |
+| deit_s_ridge_patch         | 41.707 ± 16.169   |         0.334 |     nan     |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=patch, tile_mm=48     | nan     |
+| dinov3_s_ridge_clspatch    | 41.760 ± 16.889   |         0.328 |     nan     |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls+patch, tile_mm=48 | nan     |
+| deit_s_ridge_clspatch      | 41.885 ± 17.533   |         0.361 |     nan     |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls+patch, tile_mm=48 | nan     |
+| dinov3_s_ridge_patch       | 42.046 ± 17.249   |         0.329 |     nan     |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=patch, tile_mm=48     | nan     |
+| dinov2_s_ridge_patch       | 42.430 ± 15.250   |         0.337 |     nan     |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=patch, tile_mm=48     | nan     |
+| dinov2_s_ridge_clspatch    | 42.466 ± 15.823   |         0.338 |     nan     |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls+patch, tile_mm=48 | nan     |
+| dinov2_s_ridge_cls         | 42.631 ± 15.415   |         0.339 |     nan     |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls, tile_mm=48       | nan     |
+| dinov3_s_ridge_block4      | 42.876 ± 15.690   |         0.362 |     nan     |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block4, tile_mm=48    | nan     |
+| dinov2_s_ridge_block8      | 43.041 ± 16.322   |         0.337 |     nan     |       0.001 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block8, tile_mm=48    | nan     |
+| dinov3_s_ridge_block8      | 43.481 ± 17.434   |         0.343 |     nan     |       0.001 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block8, tile_mm=48    | nan     |
+| ssl_dinov2_s_ft            | 44.089 ± 21.964   |         0.397 |     nan     |       0.037 |         3.850 | opt=adamw, lr=5e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, tile_mm=48                |   0.683 |
+| dinov2_s_lp_clspatch       | 44.283 ± 16.658   |         0.395 |     nan     |       0.002 |         3.440 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=lp, features=cls+patch, tile_mm=48    | nan     |
+| dinov2_s_da_ridge_block8   | 44.313 ± 15.742   |         0.351 |     nan     |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=block8, tile_mm=48    | nan     |
+| ssl_dinov3_s_lora          | 44.895 ± 21.064   |         0.429 |     nan     |       0.048 |         3.070 | opt=adamw, lr=0.001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lora, tile_mm=48                                |   0.694 |
+| dinov3_s_lp_clspatch       | 45.036 ± 17.564   |         0.395 |     nan     |       0.002 |         3.250 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=lp, features=cls+patch, tile_mm=48    | nan     |
+| deit_s_ridge_cls           | 45.201 ± 20.007   |         0.391 |     nan     |       0.000 |         3.160 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls, tile_mm=48       | nan     |
+| dinov2_s_da_lp_clspatch    | 45.792 ± 17.431   |         0.404 |     nan     |       0.002 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=lp, features=cls+patch, tile_mm=48    | nan     |
+| ssl_dinov2_s_lora          | 46.539 ± 21.161   |         0.441 |     nan     |       0.036 |         3.130 | opt=adamw, lr=0.001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lora, tile_mm=48                                |   0.647 |
+| dinov2_s_da_ridge_patch    | 46.943 ± 15.203   |         0.383 |     nan     |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=patch, tile_mm=48     | nan     |
+| ssl_dinov2_s_da_lpft       | 47.469 ± 19.303   |         0.443 |     nan     |       0.044 |         3.850 | opt=adamw, lr=2e-05, layer_decay=0.75, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lpft, tile_mm=48              |   0.868 |
+| dinov2_s_da_ridge_clspatch | 48.168 ± 14.346   |         0.404 |     nan     |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls+patch, tile_mm=48 | nan     |
+| ssl_dinov2_s_da_lora       | 48.942 ± 17.979   |         0.463 |     nan     |       0.035 |         3.130 | opt=adamw, lr=0.001, norm=default, aug=basic, sampler=by_sample, batch=32, mode=lora, tile_mm=48                                |   0.622 |
+| dinov2_s_da_ridge_cls      | 49.502 ± 14.554   |         0.430 |     nan     |       0.001 |         3.460 | opt=adamw, lr=0.0003, norm=default, aug=basic, sampler=by_sample, batch=32, mode=ft, head=ridge, features=cls, tile_mm=48       | nan     |
 
 
 ## Part 7 — ensembles
 
 | name                | CV (mean ± std)   |   D50_err_dec |   lb_public |   gpu_hours |   peak_mem_gb | setup   |
 |:--------------------|:------------------|--------------:|------------:|------------:|--------------:|:--------|
-| ens_top5            | 33.525 ± 15.809   |         0.286 |         nan |       0.000 |         0.000 |         |
-| ens_diverse3        | 33.675 ± 14.055   |         0.283 |         nan |       0.000 |         0.000 |         |
-| ens_best_per_family | 33.920 ± 16.921   |         0.296 |         nan |       0.000 |         0.000 |         |
-| ens_top3            | 33.920 ± 16.921   |         0.296 |         nan |       0.000 |         0.000 |         |
-| ens_diverse2        | 33.927 ± 15.188   |         0.293 |         nan |       0.000 |         0.000 |         |
+| ens_top5            | 33.525 ± 15.809   |         0.286 |      77.083 |       0.000 |         0.000 |         |
+| ens_diverse3        | 33.675 ± 14.055   |         0.283 |     nan     |       0.000 |         0.000 |         |
+| ens_best_per_family | 33.920 ± 16.921   |         0.296 |     nan     |       0.000 |         0.000 |         |
+| ens_top3            | 33.920 ± 16.921   |         0.296 |     nan     |       0.000 |         0.000 |         |
+| ens_diverse2        | 33.927 ± 15.188   |         0.293 |     nan     |       0.000 |         0.000 |         |
 
 
 ## Controls and scale robustness (CV EMD)
