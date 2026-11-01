@@ -1,0 +1,30 @@
+{
+ "chosen_by": "CV mean EMD",
+ "name": "ens_top5",
+ "cv_mean": 33.52514431930482,
+ "cv_std": 15.80933868155803,
+ "best_single": "ssl_dinov3_s_ft",
+ "best_single_cv": 34.05894585138363,
+ "family_best": {
+  "ssl": "ssl_dinov3_s_ft",
+  "cnn": "cnn_r18_bs8_grouped_frozenbn",
+  "vit": "vit_scratch"
+ },
+ "family_error_corr": {
+  "ssl": {
+   "ssl": 1.0,
+   "cnn": 0.976,
+   "vit": 0.894
+  },
+  "cnn": {
+   "ssl": 0.976,
+   "cnn": 1.0,
+   "vit": 0.921
+  },
+  "vit": {
+   "ssl": 0.894,
+   "cnn": 0.921,
+   "vit": 1.0
+  }
+ }
+}

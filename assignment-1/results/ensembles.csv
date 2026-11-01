@@ -1,0 +1,7 @@
+ensemble,members,cv_mean,cv_std,mean_pair_corr
+best single,['ssl_dinov3_s_ft'],34.05894585138363,16.042973432206946,
+ens_best_per_family,"['ssl_dinov3_s_ft', 'cnn_r18_bs8_grouped_frozenbn', 'vit_scratch']",33.919898051927184,16.9209541255426,0.9305644275556944
+ens_top3,"['ssl_dinov3_s_ft', 'vit_scratch', 'cnn_r18_bs8_grouped_frozenbn']",33.919898051927184,16.9209541255426,0.9305644275556944
+ens_top5,"['ssl_dinov3_s_ft', 'vit_scratch', 'cnn_r18_bs8_grouped_frozenbn', 'dinov2_s_da_ridge_block4', 'dinov3_s_knn_clspatch']",33.52514431930482,15.80933868155803,0.8357797077546456
+ens_diverse2,"['vit_scratch', 'dinov3_s_knn_clspatch']",33.92655973358645,15.188065634289295,0.715336807306668
+ens_diverse3,"['ssl_dinov3_s_ft', 'dinov2_s_da_ridge_block4', 'dinov3_s_knn_clspatch']",33.67541087861693,14.054816575019942,0.7925411996201558
