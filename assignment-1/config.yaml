@@ -86,3 +86,9 @@ experiments:
   frz_dinov2_s_da:   {family: ssl, type: frozen, arch: vit_small_patch14_dinov2.lvd142m, init_ckpt: checkpoints/da_dinov2_s/backbone.pt}
   ssl_dinov2_s_da_lpft: {family: ssl, arch: vit_small_patch14_dinov2.lvd142m, init_ckpt: checkpoints/da_dinov2_s/backbone.pt, mode: lpft, lp_steps: 300, lr: 2.0e-5, layer_decay: 0.75, drop_path: 0.1}
   ssl_dinov2_s_da_lora: {family: ssl, arch: vit_small_patch14_dinov2.lvd142m, init_ckpt: checkpoints/da_dinov2_s/backbone.pt, mode: lora, lr: 1.0e-3, wd: 0.0, lora_r: 8}
+
+  # ---------------- Block 8: soil-mixup on the best model of each family ----------------
+  mix_cnn_r18_bs8_grouped_frozenbn: {family: cnn, arch: resnet18.tv_in1k, batch: 8, steps: 2400, sampler: grouped, groups: 2, norm: frozen_bn, mix_p: 0.5}
+  mix_vit_scratch:      {family: vit, arch: tiny_vit, pretrained: false, lr: 5.0e-4, steps: 1500, mix_p: 0.5,
+                         arch_kwargs: {img: 224, patch: 16, dim: 192, depth: 6, heads: 3, drop_path: 0.1}}
+  mix_ssl_dinov3_s_ft:  {family: ssl, arch: vit_small_patch16_dinov3.lvd1689m, lr: 5.0e-5, layer_decay: 0.75, drop_path: 0.1, mix_p: 0.5}

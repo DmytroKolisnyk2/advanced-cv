@@ -23,7 +23,9 @@ def load_all() -> dict[str, dict]:
     out = {}
     for p in sorted(EXPS.glob("*/metrics.json")):
         m = json.loads(p.read_text())
-        if (p.parent / "oof.csv").exists() and not m["name"].startswith("ens_"):
+        # block-8 follow-ups (soil-mixup, test-time harmonised copies) are judged on their own and kept out of the
+        # search, so the submitted ensemble stays reproducible
+        if (p.parent / "oof.csv").exists() and not m["name"].startswith(("ens_", "mix_")) and not m["name"].endswith("_tth"):
             m["oof"] = pd.read_csv(p.parent / "oof.csv").sort_values("sample_id").reset_index(drop=True)
             m["test"] = pd.read_csv(p.parent / "test.csv") if (p.parent / "test.csv").exists() else None
             out[m["name"]] = m

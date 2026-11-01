@@ -4,6 +4,8 @@ base_train_mean,baseline,cpu,0.0,0.0,,
 ctrl_camera_only,baseline,cpu,0.0,0.0,,
 base_uniform,baseline,cpu,0.0,0.0,,
 cnn_r18_bs8_grouped_frozenbn,cnn,NVIDIA GeForce RTX 4090,0.0531,3.21,11.18,11.173
+cnn_r18_bs8_grouped_frozenbn_tth,cnn,NVIDIA GeForce RTX 4090,0.0531,3.21,11.18,11.173
+mix_cnn_r18_bs8_grouped_frozenbn,cnn,NVIDIA GeForce RTX 4090,0.0577,3.21,11.18,11.173
 cnn_r18_groupnorm,cnn,NVIDIA GeForce RTX 4090,0.0185,5.03,11.18,11.182
 cnn_r18_frozenbn,cnn,NVIDIA GeForce RTX 4090,0.0147,3.21,11.18,11.173
 cnn_convnext_t_sgd,cnn,NVIDIA GeForce RTX 4090,0.0363,4.52,27.83,27.829
@@ -20,13 +22,18 @@ cnn_convnext_t_adamw,cnn,NVIDIA GeForce RTX 4090,0.0712,4.52,27.83,27.829
 cnn_r18_strongaug,cnn,NVIDIA GeForce RTX 4090,0.0147,3.21,11.18,11.182
 cnn_r18_bs8_grouped,cnn,NVIDIA GeForce RTX 4090,0.056,3.21,11.18,11.182
 ens_top5,ensemble,-,0.0,0.0,,
+ens_top5_tth,ensemble,-,0.0,0.0,,
 ens_diverse3,ensemble,-,0.0,0.0,,
 ens_best_per_family,ensemble,-,0.0,0.0,,
 ens_top3,ensemble,-,0.0,0.0,,
 ens_diverse2,ensemble,-,0.0,0.0,,
 ssl_dinov3_s_ft,ssl,NVIDIA GeForce RTX 4090,0.0484,3.71,21.59,21.591
+ssl_dinov3_s_ft_tth,ssl,NVIDIA GeForce RTX 4090,0.0484,3.71,21.59,21.591
+mix_ssl_dinov3_s_ft,ssl,NVIDIA GeForce RTX 4090,0.05,3.72,21.59,21.591
 dinov2_s_da_ridge_block4,ssl,NVIDIA GeForce RTX 4090,0.0005,3.46,,
+dinov2_s_da_ridge_block4_tth,ssl,NVIDIA GeForce RTX 4090,0.0005,3.46,,
 dinov3_s_knn_clspatch,ssl,NVIDIA GeForce RTX 4090,0.0007,3.25,,
+dinov3_s_knn_clspatch_tth,ssl,NVIDIA GeForce RTX 4090,0.0007,3.25,,
 dinov2_s_da_knn_clspatch,ssl,NVIDIA GeForce RTX 4090,0.0005,3.46,,
 ssl_dinov3_s_lpft,ssl,NVIDIA GeForce RTX 4090,0.0558,3.71,21.59,21.591
 deit_s_knn_clspatch,ssl,NVIDIA GeForce RTX 4090,0.0004,3.16,,
@@ -60,7 +67,9 @@ ssl_dinov2_s_da_lpft,ssl,NVIDIA GeForce RTX 4090,0.0442,3.85,21.63,21.633
 dinov2_s_da_ridge_clspatch,ssl,NVIDIA GeForce RTX 4090,0.0005,3.46,,
 ssl_dinov2_s_da_lora,ssl,NVIDIA GeForce RTX 4090,0.0348,3.13,21.85,0.225
 dinov2_s_da_ridge_cls,ssl,NVIDIA GeForce RTX 4090,0.0005,3.46,,
+mix_vit_scratch,vit,NVIDIA GeForce RTX 4090,0.0481,2.53,2.86,2.857
 vit_scratch,vit,NVIDIA GeForce RTX 4090,0.038,2.53,2.86,2.857
+vit_scratch_tth,vit,NVIDIA GeForce RTX 4090,0.038,2.53,2.86,2.857
 vit_deit_s_sgd,vit,NVIDIA GeForce RTX 4090,0.0297,3.33,21.67,21.67
 vit_maxvit_t,vit,NVIDIA GeForce RTX 4090,0.1407,7.6,30.41,30.409
 vit_deit_s_img112,vit,NVIDIA GeForce RTX 4090,0.0328,2.64,21.61,21.613

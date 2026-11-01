@@ -167,3 +167,12 @@ Motivation: CV 34 vs public LB 77-80, and the 4 sands have EMD about 60 in every
   assuming area ≈ mass. The models now see only 24 curves, mostly two modes. *Prediction:* CV improves by 1-3 EMD,
   and the sand EMD drops from about 60 to at most 50. The fine-tuned CNN and DINOv3 benefit more than the
   scratch ViT (whose colour cue is blurred by the mix).
+
+### Outcome (block 8)
+
+- H8.1 **(a) half, (b) not supported, (c) confirmed.** The DINOv3 distance from test to training photos drops by 12%,
+  but sharpness overshoots the training value (0.239 -> 0.262 vs 0.249: the downscale plus JPEG blocking adds high
+  frequencies). The trained models' test predictions move by only 1-2 EMD, so the public LB cannot improve by 3-10;
+  the CV-LB gap is a soil-distribution gap, not a camera one. On H374 the harmonised input costs +1.2 to +1.6 EMD (< 3).
+- H8.2 **wrong.** CV changes by -0.8 to +0.6, and the sands stay at 58-60. Mixtures of training soils are convex
+  combinations of their curves; fine + gravel gives gap-graded curves, not sands.

@@ -6,25 +6,25 @@
  "best_single": "ssl_dinov3_s_ft",
  "best_single_cv": 34.05894585138363,
  "family_best": {
-  "ssl": "ssl_dinov3_s_ft",
+  "vit": "vit_scratch",
   "cnn": "cnn_r18_bs8_grouped_frozenbn",
-  "vit": "vit_scratch"
+  "ssl": "ssl_dinov3_s_ft"
  },
  "family_error_corr": {
-  "ssl": {
-   "ssl": 1.0,
-   "cnn": 0.976,
-   "vit": 0.894
+  "vit": {
+   "vit": 1.0,
+   "cnn": 0.921,
+   "ssl": 0.894
   },
   "cnn": {
-   "ssl": 0.976,
+   "vit": 0.921,
    "cnn": 1.0,
-   "vit": 0.921
+   "ssl": 0.976
   },
-  "vit": {
-   "ssl": 0.894,
-   "cnn": 0.921,
-   "vit": 1.0
+  "ssl": {
+   "vit": 0.894,
+   "cnn": 0.976,
+   "ssl": 1.0
   }
  }
 }

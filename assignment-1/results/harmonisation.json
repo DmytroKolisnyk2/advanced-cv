@@ -1,0 +1,41 @@
+{
+ "jpeg_quality": {
+  "motorolaedge": 75,
+  "samsunga52": 75
+ },
+ "long_side": 1600,
+ "sharpness": {
+  "train (messenger)": 0.24892611801624298,
+  "test original": 0.23906438052654266,
+  "test harmonised": 0.2620537579059601
+ },
+ "dinov3_nn_cosine_distance": {
+  "test original": 0.1243866808358727,
+  "test harmonised": 0.10969268928980647
+ },
+ "H374_check": [
+  {
+   "model": "ssl_dinov3_s_ft",
+   "H374_original": 21.0,
+   "H374_harmonised": 22.22
+  },
+  {
+   "model": "vit_scratch",
+   "H374_original": 28.62,
+   "H374_harmonised": 30.18
+  },
+  {
+   "model": "cnn_r18_bs8_grouped_frozenbn",
+   "H374_original": 50.37,
+   "H374_harmonised": 51.75
+  }
+ ],
+ "test_shift_emd": {
+  "ssl_dinov3_s_ft": 1.6538640047967417,
+  "vit_scratch": 0.981207455983992,
+  "cnn_r18_bs8_grouped_frozenbn": 1.914179910253407,
+  "dinov3_s_knn_clspatch": 6.687468436283892,
+  "dinov2_s_da_ridge_block4": 5.817976876897136,
+  "ens_top5": 3.13069607594266
+ }
+}

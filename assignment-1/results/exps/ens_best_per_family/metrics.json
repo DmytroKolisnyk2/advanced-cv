@@ -1,7 +1,7 @@
 {
- "cv_pooled": 33.919898051927184,
+ "cv_pooled": 33.91989805192718,
  "cv_mean": 33.919898051927184,
- "cv_std": 16.9209541255426,
+ "cv_std": 16.920954125542604,
  "per_fold": [
   39.484,
   14.831,
@@ -43,9 +43,9 @@
  "name": "ens_best_per_family",
  "family": "ensemble",
  "members": [
-  "ssl_dinov3_s_ft",
+  "vit_scratch",
   "cnn_r18_bs8_grouped_frozenbn",
-  "vit_scratch"
+  "ssl_dinov3_s_ft"
  ],
  "gpu": "-",
  "gpu_hours": 0.0,

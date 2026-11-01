@@ -148,6 +148,29 @@ class BatchSampler:
         return np.array([self.rng.choice(self.by_sample[pool[c]]) for c in chosen])
 
 
+def soil_mixup(x: torch.Tensor, y: torch.Tensor, sid: np.ndarray, p: float) -> tuple[torch.Tensor, torch.Tensor]:
+    """Paste a random rectangle of another soil's tile (same mm per pixel) into each tile with probability p and mix
+    the curves by the pasted area: a mass-fraction-lambda mixture of two soils has curve (1-lambda) F_A + lambda F_B."""
+    b, _, h, w = x.shape
+    dev = x.device
+    perm = torch.randperm(b, device=dev)
+    other = torch.from_numpy(sid != sid[perm.cpu().numpy()]).to(dev)
+    use = (torch.rand(b, device=dev) < p) & other
+    lam = torch.empty(b, device=dev).uniform_(0.15, 0.85)
+    rh = (lam.sqrt() * h).round().clamp(1, h)
+    rw = (lam * h * w / rh).round().clamp(1, w)
+    y0 = (torch.rand(b, device=dev) * (h - rh + 1)).floor()
+    x0 = (torch.rand(b, device=dev) * (w - rw + 1)).floor()
+    yy = torch.arange(h, device=dev).view(1, h, 1)
+    xx = torch.arange(w, device=dev).view(1, 1, w)
+    mask = ((yy >= y0.view(b, 1, 1)) & (yy < (y0 + rh).view(b, 1, 1)) & (xx >= x0.view(b, 1, 1))
+            & (xx < (x0 + rw).view(b, 1, 1)) & use.view(b, 1, 1)).unsqueeze(1)
+    x = torch.where(mask, x[perm], x)
+    area = mask.float().mean((1, 2, 3))
+    y = (1 - area[:, None]) * y + area[:, None] * y[perm]
+    return x, y
+
+
 def train_fold(cfg: dict, store: TileStore, tr_ids: np.ndarray, targets: dict[str, np.ndarray],
                prior: np.ndarray, seed: int, log: list) -> torch.nn.Module:
     torch.manual_seed(seed)
@@ -187,15 +210,18 @@ def train_fold(cfg: dict, store: TileStore, tr_ids: np.ndarray, targets: dict[st
             for g in opt.param_groups:
                 g["lr"] = g["base_lr"] * f * g.get("lr_scale", 1.0)
             ids = sampler(cfg["batch"])
-            x = normalize(gpu_augment(store.batch(ids, cfg.get("img")), cfg.get("aug", "basic")))
+            x = gpu_augment(store.batch(ids, cfg.get("img")), cfg.get("aug", "basic"))
+            y = tgt[ids]
+            if cfg.get("mix_p", 0) > 0 and stage != "lp":
+                x, y = soil_mixup(x, y, store.index.sample_id.to_numpy()[ids], cfg["mix_p"])
             with torch.autocast("cuda", dtype=torch.bfloat16):
-                loss = emd_loss(logits_to_curve(model(x)), tgt[ids])
+                loss = emd_loss(logits_to_curve(model(normalize(x))), y)
             opt.zero_grad(set_to_none=True)
             loss.backward()
             torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad], cfg.get("clip", 1.0))
             opt.step()
             if step % 20 == 0 or step == steps - 1:
-                log.append({"stage": stage, "step": step, "loss": float(loss), "lr": opt.param_groups[0]["lr"]})
+                log.append({"stage": stage, "step": step, "loss": float(loss.detach()), "lr": opt.param_groups[0]["lr"]})
             if not math.isfinite(float(loss)):
                 log.append({"stage": stage, "step": step, "loss": float("nan"), "diverged": True})
                 return model

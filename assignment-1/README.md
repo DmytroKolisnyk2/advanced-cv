@@ -17,10 +17,10 @@ pipeline and one set of folds.
 | best SSL: DINOv3 ViT-S/16, full fine-tuning | **34.1 ± 16.0** | 79.9 |
 | **final: equal-weight ensemble of 5 diverse models** | **33.5 ± 15.8** | **77.1** |
 
-All numbers are log-EMD (percent x decades, lower is better). The full table of 72 runs, with CV, D50 error,
+All numbers are log-EMD (percent x decades, lower is better). The full table of all 75 runs, with CV, D50 error,
 controls, scale robustness, CKA and compute, is in [results/tables.md](results/tables.md) and `results/results.csv`.
 The final submission ([results/submissions/final.csv](results/submissions/final.csv)) was chosen by CV, not by the
-public LB, which covers only 3 test soils. Total compute: 1.44 GPU-hours on one RTX 4090 (48 GB), peak memory
+public LB, which covers only 3 test soils. Total compute: about 1.6 GPU-hours on one RTX 4090 (48 GB), peak memory
 10.7 GB (DINO adaptation), all other runs under 8 GB.
 
 Main findings:
@@ -272,7 +272,8 @@ only the named information):
 - **Hypotheses that turned out wrong** (details in [HYPOTHESES.md](HYPOTHESES.md)): the scratch ViT is not at
   baseline level but the best ViT (H2.1); SGD does not break the ViT, it beats AdamW (H2.2); the hardest soils are
   the sands, not the fine soils (H0.2); the improvement over the training mean is about 60%, not 20-35% (H0.3);
-  DINO adaptation hurt the last-layer features instead of being neutral (H3.4).
+  DINO adaptation hurt the last-layer features instead of being neutral (H3.4); test-time harmonisation
+  moves the test predictions by only 1-2 EMD (H8.1); soil-mixup does not help the sands (H8.2).
 
 ## Part 6. Comparison of approaches
 
@@ -320,6 +321,44 @@ least-correlated members (k-NN, ridge on another encoder) lowers the fold std mo
 beat a blend of the "best" ones: the three family bests (corr 0.93) gain almost nothing. The final submission is
 the top-5 blend, chosen by CV only. With 24 soils the choice among ensembles within 0.4 EMD is not meaningful, so
 it was not tuned further (no weight optimisation on OOF).
+
+## Block 8. Follow-up: closing the CV-LB gap and the sands
+
+Two hypothesis-driven follow-ups (hypotheses committed before the runs, see HYPOTHESES.md, block 8).
+
+**Test-time harmonisation (H8.1).** The training photos went through a messenger: they are 1600 px on the long
+side, JPEG quality 75 (estimated from the quantisation tables of the files). The test iPhone photos were put
+through the same path (`scripts/harmonise.py`), with ppm scaled accordingly, then the same tiling and the already
+trained models (no retraining, so CV does not change).
+
+| label-free check | train | test original | test harmonised |
+|---|---|---|---|
+| DINOv3 cosine distance to the nearest training photo | — | 0.124 | 0.110 (-12%) |
+| sharpness (mean abs Laplacian at 4.67 px/mm) | 0.249 | 0.239 | 0.262 |
+| H374 OOF EMD, the only native-resolution training soil (DINOv3 FT / ViT / CNN) | — | 21.0 / 28.6 / 50.4 | 22.2 / 30.2 / 51.8 |
+| mean EMD between original and harmonised test predictions (DINOv3 FT / ViT / CNN / k-NN / ensemble) | — | — | 1.7 / 1.0 / 1.9 / 6.7 / 3.1 |
+
+The test photos do move towards the training photos in feature space, but the predictions of the trained models
+change by only 1-2 EMD (the frozen k-NN/ridge models by 6-7). Harmonisation therefore cannot explain more than a
+few points of the 45-EMD gap between CV and LB: the gap comes from the test soils themselves (soils unlike the 24
+training curves; the training-mean curve also loses 16 EMD on the public soils), not from camera artefacts. The
+harmonised test predictions are in `results/exps/*_tth/` (LB pending, the daily submission limit was reached).
+
+**Soil-mixup (H8.2).** A rectangle (15-85% of the area) from a tile of another soil, at the same mm per pixel, is
+pasted into a tile with p = 0.5, and the target curve is mixed by the pasted area. A mass-λ mixture of two soils
+has curve (1-λ)F_A + λF_B, assuming area ≈ mass.
+
+| model | CV without -> with mixup | fine | gravel | sand |
+|---|---|---|---|---|
+| ResNet-18 frozen BN (2-soil batches) | 35.9 -> 36.4 | 35.4 -> 36.1 | 27.7 -> 28.6 | 59.5 -> 58.5 |
+| ViT from scratch | 35.3 -> 34.5 | 35.4 -> 32.7 | 26.5 -> 27.0 | 59.2 -> 59.5 |
+| DINOv3-S full FT | 34.1 -> 34.6 | 31.9 -> 33.9 | 26.2 -> 26.9 | 60.4 -> 57.6 |
+
+No significant change, and the sands stay at about 58-60 (H8.2 wrong). The reason is in label space: a mixture
+of two training soils is a convex combination of their curves. Mixing a fine soil with a gravel gives a
+gap-graded curve (much silt and much gravel, little sand), and a real sand with most of its mass in 0.063-2 mm is
+outside the convex hull of the fine and gravel curves. Only the 4 sands themselves span that region, so mixup
+cannot create it. The block-8 runs are kept out of the final ensemble search, so the submitted ensemble is unchanged.
 
 ## Checkpoints
 

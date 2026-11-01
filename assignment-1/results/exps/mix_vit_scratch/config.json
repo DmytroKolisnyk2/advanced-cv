@@ -1,0 +1,29 @@
+{
+ "batch": 32,
+ "steps": 1500,
+ "opt": "adamw",
+ "lr": 0.0005,
+ "wd": 0.05,
+ "warmup": 0.1,
+ "sched": "cosine",
+ "aug": "basic",
+ "sampler": "by_sample",
+ "norm": "default",
+ "mode": "ft",
+ "drop_path": 0.0,
+ "no_wd_norm_bias": true,
+ "seed": 0,
+ "family": "vit",
+ "arch": "tiny_vit",
+ "pretrained": false,
+ "mix_p": 0.5,
+ "arch_kwargs": {
+  "img": 224,
+  "patch": 16,
+  "dim": 192,
+  "depth": 6,
+  "heads": 3,
+  "drop_path": 0.1
+ },
+ "tile_mm": 48
+}
