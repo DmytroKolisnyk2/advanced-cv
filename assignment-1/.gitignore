@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+data/
+cache/
+checkpoints/
+runs/*.log
+remote/.pod.json
+remote/.known_hosts
+*.pth
+*.pt
+.ipynb_checkpoints/

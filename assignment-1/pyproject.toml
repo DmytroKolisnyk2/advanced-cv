@@ -1,0 +1,50 @@
+[project]
+name = "soilgs"
+version = "0.1.0"
+description = "AI401 Assignment 1: soil grain-size distribution from photos with CNNs, ViTs and self-supervised encoders"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch==2.14.1",
+    "torchvision",
+    "timm",
+    "numpy",
+    "pandas",
+    "pillow",
+    "scikit-learn",
+    "scipy",
+    "matplotlib",
+    "pyyaml",
+    "tqdm",
+    "requests",
+    "kaggle",
+    "tabulate",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel",
+    "nbconvert",
+    "pytest",
+]
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu126" }]
+torchvision = [{ index = "pytorch-cu126" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/soilgs"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
